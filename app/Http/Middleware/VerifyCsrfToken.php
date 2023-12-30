@@ -12,6 +12,10 @@ class VerifyCsrfToken extends Middleware
      * @var array<int, string>
      */
     protected $except = [
-        //
+        // 'insomnia/2023.5.8',
+        // 'web'
+        'users',
+        'login',
+        'logout',
     ];
 }
