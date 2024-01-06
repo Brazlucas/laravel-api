@@ -4,6 +4,7 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\LoginController;
+use App\Http\Controllers\ErrorController;
 
 /*
 |--------------------------------------------------------------------------
@@ -16,9 +17,15 @@ use App\Http\Controllers\LoginController;
 |
 */
 
-Route::get('/login', [LoginController::class, 'login'])->name('login');
-Route::post('/login', [LoginController::class, 'login']);
-Route::post('/logout', [LoginController::class, 'logout']);
+Route::get('/error', [ErrorController::class, 'error'])->name('error');
 
-Route::resource('users', UserController::class)->middleware('auth');
-Route::get('/',[HomeController::class, 'index'])->middleware('auth');
+Route::group([], function () {
+  Route::get('/login', [LoginController::class, 'login'])->name('login');
+  Route::post('/login', [LoginController::class, 'login']);
+  Route::post('/logout', [LoginController::class, 'logout']);
+});
+
+Route::middleware(['auth', 'is_admin'])->group(function () {
+    Route::resource('users', UserController::class);
+    Route::get('/', [HomeController::class, 'index']);
+});
